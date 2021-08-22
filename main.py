@@ -1,1 +1,8 @@
-#This file will need to use the DataManager,FlightSearch, FlightData, NotificationManager classes to achieve the program requirements.
+from data_manager import DataManager
+
+# get all data from sheet
+dm = DataManager()
+dm.initialise_service()
+dm.read_records()
+dm.write_codes(entries=[["TESTING", "TESTING", "TESTING", "TESTING",
+                        "TESTING", "TESTING", "TESTING", "TESTING", "TESTING"]])
