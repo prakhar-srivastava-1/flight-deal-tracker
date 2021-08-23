@@ -3,7 +3,7 @@ from secrets import GOOGLE_API_KEY, SPREADSHEET_ENDPOINT, SPREADSHEET_ID
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 
-# SPREADSHEET_RANGE = "A1:E"
+SPREADSHEET_RANGE = "A2:C"
 
 
 class DataManager:
@@ -29,15 +29,10 @@ class DataManager:
         # Call the Sheets API
         sheet = self.service.spreadsheets()
 
-        # records to write
-        # records = {
-        #     "values": entries
-        # }
-
-        result = self.service.spreadsheets().values().get(
-            spreadsheetId=SPREADSHEET_ID, range="A1:C").execute()
+        result = sheet.values().get(
+            spreadsheetId=SPREADSHEET_ID, range=f"prices!{SPREADSHEET_RANGE}").execute()
         rows = result.get('values', [])
-        print(rows)
+        return rows
 
     def write_codes(self, entries):
         # Call the Sheets API
@@ -49,10 +44,6 @@ class DataManager:
             "majorDimension": "COLUMNS",
         }
 
-        # start writing from A + (self.max_row + 1)
-        # write_range = f"prices!A{int(self.max_row) + 1}"
-
-        # Create the request object
         request = sheet.values().update(
             spreadsheetId=SPREADSHEET_ID,
             range="B2",
