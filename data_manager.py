@@ -25,12 +25,12 @@ class DataManager:
         # Build the service object
         self.service = build('sheets', 'v4', credentials=creds)
 
-    def read_records(self):
+    def read_records(self, sheet_name):
         # Call the Sheets API
         sheet = self.service.spreadsheets()
 
         result = sheet.values().get(
-            spreadsheetId=SPREADSHEET_ID, range=f"prices!{SPREADSHEET_RANGE}").execute()
+            spreadsheetId=SPREADSHEET_ID, range=f"{sheet_name}!{SPREADSHEET_RANGE}").execute()
         rows = result.get('values', [])
         return rows
 
