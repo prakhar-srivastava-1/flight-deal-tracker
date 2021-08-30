@@ -1,6 +1,7 @@
 from data_manager import DataManager
 from flight_search import FlightSearch
 from flight_data import FlightData
+from notification_manager import NotificationManager
 
 import pprint as pp
 
@@ -31,15 +32,25 @@ for each_dest in city_codes:
         flight_no = each_flight["route"][0]["flight_no"]
         airline = each_flight["airlines"]
         price = each_flight["price"]
-        dep_date = each_flight["utc_departure"]
+        dep_date = each_flight["route"][0]["utc_departure"]
         dep_airport_code = each_flight["flyFrom"]
         dep_city = each_flight["cityFrom"]
         arr_airport_code = each_flight["flyTo"]
         arr_city = each_flight["cityTo"]
         ticket_link = each_flight["deep_link"]
-        flight = FlightData(airline, flight_no, price, dep_date, dep_airport_code,
-                            dep_city, arr_airport_code, arr_city, ticket_link)
+        # Return journey
+        ret_flight_no = each_flight["route"][1]["flight_no"]
+        ret_dep_date = each_flight["route"][1]["utc_departure"]
+
+        flight = FlightData(airline, flight_no, price, dep_date, ret_dep_date,
+                            dep_airport_code, dep_city, arr_airport_code, arr_city,
+                            ticket_link)
         flights.append(flight)
         # print(flights)
 
 cheapest_flight = fs.get_cheapest_flight(flights)
+
+# send a notification if cheapest_flight not None
+nm = NotificationManager()
+if cheapest_flight is not None:
+    nm.send_alert(cheapest_flight)
