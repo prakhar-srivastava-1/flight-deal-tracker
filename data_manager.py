@@ -25,12 +25,12 @@ class DataManager:
         # Build the service object
         self.service = build('sheets', 'v4', credentials=creds)
 
-    def read_records(self):
+    def read_records(self, sheet_name):
         # Call the Sheets API
         sheet = self.service.spreadsheets()
 
         result = sheet.values().get(
-            spreadsheetId=SPREADSHEET_ID, range=f"prices!{SPREADSHEET_RANGE}").execute()
+            spreadsheetId=SPREADSHEET_ID, range=f"{sheet_name}!{SPREADSHEET_RANGE}").execute()
         rows = result.get('values', [])
         return rows
 
@@ -60,5 +60,37 @@ class DataManager:
         response = request.execute()
 
         if int(response.get("updatedRows")) > 0:
+            return True
+        return False
+
+    def add_user(self, user):
+        # Call the Sheets API
+        sheet = self.service.spreadsheets()
+
+        # create record
+        entries = [
+            [
+                user.first_name,
+                user.last_name,
+                user.email
+            ]
+        ]
+
+        # records to write
+        records = {
+            "values": entries,
+            "majorDimension": "ROWS",
+        }
+
+        request = sheet.values().append(
+            spreadsheetId=SPREADSHEET_ID,
+            range="users",
+            valueInputOption="USER_ENTERED",
+            insertDataOption="INSERT_ROWS",
+            body=records
+        )
+        response = request.execute()
+
+        if response.get("updatedRange") is not None:
             return True
         return False
