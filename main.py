@@ -7,28 +7,39 @@ import pprint as pp
 # get all data from sheet
 dm = DataManager()
 dm.initialise_service()
-city_list = dm.read_records()
+sheet_records = dm.read_records()
 
 # get the city codes from Tequila API
 fs = FlightSearch()
-city_codes = fs.get_code_list(city_list)
-dm.write_codes(entries=[city_codes])
+city_codes = fs.get_code_list(sheet_records)
+# dm.write_codes(entries=[city_codes])
+
+# get the prices mentioned in sheet
+prices_from_sheet = dm.get_flight_price(sheet_records)
+
+# create a list of tuples [(city_code, price), ...]
+sheet_city_price = dict(zip(city_codes, prices_from_sheet))
 
 flights = list()
-for each_dest in city_codes:
-    each_flight = fs.search_flights(each_dest)
-    flight_no = each_flight["route"][0]["flight_no"]
-    airline = each_flight["airlines"]
-    price = each_flight["price"]
-    dep_date = each_flight["utc_departure"]
-    dep_airport_code = each_flight["flyFrom"]
-    dep_city = each_flight["cityFrom"]
-    arr_airport_code = each_flight["flyTo"]
-    arr_city = each_flight["cityTo"]
-    ticket_link = each_flight["deep_link"]
-    flight = FlightData(airline, flight_no, price, dep_date, dep_airport_code,
-                        dep_city, arr_airport_code, arr_city, ticket_link)
-    flights.append(flight)
+# each_flight = fs.search_flights('TYO')
+# pp.pprint(each_flight)
 
-for flight in flights:
-    print(f"{flight.arrival_city}: €{flight.price}")
+for each_dest in city_codes:
+    each_flight = fs.search_flights(each_dest, sheet_city_price[each_dest])
+    if len(each_flight) != 0:
+        each_flight = each_flight[0]
+        flight_no = each_flight["route"][0]["flight_no"]
+        airline = each_flight["airlines"]
+        price = each_flight["price"]
+        dep_date = each_flight["utc_departure"]
+        dep_airport_code = each_flight["flyFrom"]
+        dep_city = each_flight["cityFrom"]
+        arr_airport_code = each_flight["flyTo"]
+        arr_city = each_flight["cityTo"]
+        ticket_link = each_flight["deep_link"]
+        flight = FlightData(airline, flight_no, price, dep_date, dep_airport_code,
+                            dep_city, arr_airport_code, arr_city, ticket_link)
+        flights.append(flight)
+        # print(flights)
+
+cheapest_flight = fs.get_cheapest_flight(flights)
