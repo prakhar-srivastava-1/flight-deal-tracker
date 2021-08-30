@@ -1,5 +1,7 @@
 from data_manager import DataManager
 from user_data import UserData
+from notification_manager import NotificationManager
+from flight_data import FlightData
 
 # user = UserData()
 # user.get_details()
@@ -23,5 +25,8 @@ for user in users:
     user_list.append(user)
 
 # send email
-
+nm = NotificationManager()
+cheapest_flight = FlightData()
+for each_user in user_list:
+    nm.send_email(each_user, cheapest_flight)
 print(user_list)
