@@ -1,8 +1,8 @@
 class UserData:
-    def __init__(self):
-        self.first_name = ""
-        self.last_name = ""
-        self.email = ""
+    def __init__(self, first_name="", last_name="", email=""):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.email = email
 
     def get_details(self):
         print("Welcome to the Flight Club!\nWe find the best flight deals and email you")
