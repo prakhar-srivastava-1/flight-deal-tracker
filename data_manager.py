@@ -34,6 +34,13 @@ class DataManager:
         rows = result.get('values', [])
         return rows
 
+    @staticmethod
+    def get_flight_price(records):
+        flight_prices = list()
+        for city in records:
+            flight_prices.append(city[2])
+        return flight_prices
+
     def write_codes(self, entries):
         # Call the Sheets API
         sheet = self.service.spreadsheets()
