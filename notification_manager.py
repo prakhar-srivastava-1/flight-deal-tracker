@@ -15,7 +15,7 @@ class NotificationManager:
     def send_alert(self, flight: FlightData):
         text_body = f"Only £{flight.price} to fly from " \
                     f"{flight.departure_city}-{flight.departure_airport_code} to " \
-                    f"{flight.departure_city}-{flight.departure_airport_code}, from " \
+                    f"{flight.arrival_city}-{flight.arrival_airport_code}, from " \
                     f"{flight.departure_date} to {flight.ret_dep_date}."
         message = self.client.messages.create(
             body=text_body,
