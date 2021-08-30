@@ -31,11 +31,13 @@ class NotificationManager:
         print(message.status)
 
     def send_email(self, user, flight):
-        email_body = f"Dear {user.first_name} {user.last_name}," \
-                     f"Only £{flight.price} to fly from " \
+        email_body = f"Subject: Upcoming Flight | The Flight Club\n\n" \
+                     f"Dear {user.first_name} {user.last_name},\n\n" \
+                     f"Only GBP {flight.price} to fly from " \
                      f"{flight.departure_city}-{flight.departure_airport_code} to " \
                      f"{flight.arrival_city}-{flight.arrival_airport_code}, from " \
-                     f"{flight.departure_date} to {flight.ret_dep_date}."
+                     f"{flight.departure_date} to {flight.ret_dep_date}." \
+                     f"\n\nBest Regards,\nThe Flight Club"
 
         with smtplib.SMTP("smtp.gmail.com") as connection:
             connection.starttls()
