@@ -36,7 +36,7 @@ class FlightSearch:
             city_codes.append(self.get_city_code(city[0]))
         return city_codes
 
-    def search_flights(self, destination, source="LON"):
+    def search_flights(self, destination, price_to, source="LON"):
         now = dt.datetime.now()
         future = now + dt.timedelta(days=6 * 30)
 
@@ -49,10 +49,11 @@ class FlightSearch:
             "date_from": from_date,
             "date_to": to_date,
             "curr": "GBP",
-            "nights_in_dest_from": 7,
-            "nights_in_dest_to": 28,
+            "nights_in_dst_from": 7,
+            "nights_in_dst_to": 28,
             "max_stopovers": 0,
             "one_for_city": 1,
+            "price_to": int(price_to),
             "asc": 1,
         }
         headers = {
@@ -65,5 +66,14 @@ class FlightSearch:
         )
 
         response.raise_for_status()
-        return response.json()["data"][0]
+        return response.json()["data"]
+        # return response.json()["data"][0]
         # print(from_date, to_date)
+
+    @staticmethod
+    def get_cheapest_flight(list_of_flights):
+        cheapest_flight = list_of_flights[0]
+        for flight in list_of_flights[1:]:
+            if int(cheapest_flight.price) > int(flight.price):
+                cheapest_flight = flight
+        return cheapest_flight
