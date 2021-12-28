@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "YOUR_GOOGLE_DEV_PROJECT_ID",
+  "private_key_id": "YOUR_GOOGLE_DEV_PRIVATE_KEY_ID",
+  "private_key": "YOUR_ENTIRE_GOOGLE_DEV_PRIVATE_KEY_AS_TEXT_OR_YOU_MAY_ADD_ENV_VARIABLES",
+  "client_email": "YOUR_GOOGLE_DEV_EMAIL.iam.gserviceaccount.com",
+  "client_id": "YOUR_GOOGLE_DEV_CLIENT_ID",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "YOUR_GOOGLE_DEV_CERTIFICATE_URL"
+}
